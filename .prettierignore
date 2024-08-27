@@ -1,0 +1,15 @@
+/.vscode
+/.vscode-test
+/.npm
+/.node_modules
+/.yarn
+/.yarnrc
+/.yarn-integrity
+/.dist
+/.cache
+
+
+
+.env
+*.env
+.env*

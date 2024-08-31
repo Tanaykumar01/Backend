@@ -12,11 +12,12 @@ const uploadResult = async (file) => {
         const result = await cloudinary.uploader.upload(file, {
             resource_type: "auto",
         })
-        console.log("file has been uploaded successfully" , result.url);
+        // console.log("file has been uploaded successfully" , result.url);
+        fs.unlinkSync(file)
         return result;
     } catch (error) {
         fs.unlinkSync(file);
-        console.log("file has been deleted successfully");
+        // console.log("file has been deleted successfully");
         return null;
     }
 }

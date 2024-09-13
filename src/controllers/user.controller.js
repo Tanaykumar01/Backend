@@ -4,11 +4,11 @@ import User from "../models/user.model.js";
 import { uploadResult } from "../utils/cloundinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-const generateAccessAndRefreshToken = async (userId) => {
+const generateAccessAndRefereshTokens = async (userId) =>{
     try{
-        const user = await User.findOne({_id: userId});
-        const accessToken = await user.generateAccessToken();
-        const refreshToken = await user.generateRefreshToken();
+        const user = await User.findById(userId)
+        const accessToken = user.generateAccessToken()
+        const refreshToken = user.generateRefreshToken()
 
         user.refreshToken = refreshToken;
         await user.save({validateBeforeSave : false});
@@ -88,6 +88,11 @@ const loginUser = asyncHandler(async (req, res) => {
     if([email, username ,password].includes("")){
         throw new ApiError(400,"Please fill all the required fields");
     }
+
+    if(!(email || username)){
+        throw new ApiError(400,"Please provide email or username");
+    }
+
     const user = await User.findOne({
         $or : [{email} , {username}]
     });
@@ -99,7 +104,7 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new ApiError(401,"Password is incorrect");
     }
 
-    const {accessToken , refreshToken} = await generateAccessAndRefreshToken(user._id);
+    const {accessToken , refreshToken} = await generateAccessAndRefereshTokens(user._id);
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
@@ -132,10 +137,9 @@ const logoutUser = asyncHandler(async (req, res) => {
     const options = {
         httpOnly : true,
         secure : true,
-        expires : new Date(0)
     }
 
-    return res.sataus(200)
+    return res.status(200)
     .clearCookie("accessToken" , options)
     .clearCookie("refreshToken" , options)
     .json(

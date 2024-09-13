@@ -33,15 +33,16 @@ const UserSchema = new mongoose.Schema({
         index : true
     },
     avatar : {
-        type : String
+        type : String,
+        required : true
     },
-    coverimage : {
+    coverImage : {
         type : String
     },
     refreshToken : {
         type : String
     }
-}, {timeStamps : true});
+}, {timestamps : true});
 
 UserSchema.pre("save" ,function(next){
     if(!this.isModified("password")){

@@ -17,7 +17,7 @@ const uploadResult = async (localFilePath) => {
         return result;
     } catch (error) {
         fs.unlinkSync(localFilePath);
-        // console.log("file has been deleted successfully");
+        console.log("file has been deleted successfully");
         return null;
     }
 }

@@ -108,8 +108,8 @@ const loginUser = asyncHandler(async (req, res) => {
     const {accessToken , refreshToken} = await generateAccessAndRefereshTokens(user._id);
 
     // Save refresh token in the database
-    user.refreshToken = refreshToken;
-    await user.save();
+    // user.refreshToken = refreshToken;
+    // await user.save();
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
@@ -132,7 +132,9 @@ const loginUser = asyncHandler(async (req, res) => {
 const logoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(req.user._id , 
         {
-            refreshToken : undefined
+            $unset: {
+                refreshToken: 1 // this removes the field from document
+            }
         },
         {
             new : true

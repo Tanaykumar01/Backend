@@ -219,7 +219,8 @@ const changeCurrentPassword = asyncHandler(async (req , res) => {
             new ApiResponse(202 , {} ,"Password Updated")
         )
     } catch (error) {
-        throw new ApiError(500 , "error while changing password")
+        console.log(error);
+        throw new ApiError(500 , error?.message || "error while changing password")
     }
 })
 
